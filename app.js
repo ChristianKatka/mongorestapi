@@ -7,12 +7,14 @@ const mongoose = require('mongoose');
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+require('dotenv/config');
+
 
 const app = express();
-mongoose.connect('mongodb+srv://admin:admin@shop-3jrpt.mongodb.net/test?retryWrites=true&w=majority', {
+mongoose.connect(process.env.DB_CONNECTION, {
     useNewUrlParser: true,
     useUnifiedTopology: true
-}).catch(error => console.log(error));
+}, () => console.log('Successfully connected to db'));
 
 
 
@@ -20,8 +22,13 @@ mongoose.connect('mongodb+srv://admin:admin@shop-3jrpt.mongodb.net/test?retryWri
 // Middleware that logs http requests like: 'GET /orders 200 9.200 ms - 24'
 app.use(morgan('dev'));
 // Application can accept and read incoming data. ex: req.body.username
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+
+
+
+
 
 // static AKA public. Makes uploads folder available in browser and able to see pictures by just typing path in URL
 app.use('/uploads', express.static('uploads'));
@@ -34,9 +41,13 @@ app.use('/uploads', express.static('uploads'));
 //     );
 // });
 
+
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
 app.use('/users', userRoutes);
+app.use('/', (req, res) => {
+    res.json({message: 'welcome to the server'});
+});
 
 // if program gets to this point where no available routes were called
 app.use((req, res, next) => {

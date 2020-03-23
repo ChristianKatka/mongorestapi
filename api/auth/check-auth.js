@@ -1,12 +1,12 @@
 const jwt = require('jsonwebtoken');
-
+require('dotenv/config');
 
 // Middleware syntax
 module.exports = (req, res, next) => {
     try {
         // POSTMAN: Headers -> Authorization: bearer token
         const token = req.headers.authorization.split(" ")[1];
-        const decodedToken = jwt.verify(token, 'secret', null);
+        const decodedToken = jwt.verify(token, process.env.SECRETKEY, null);
         // now we can access it by jwtUserData
         req.jwtUserData = decodedToken;
         next();
