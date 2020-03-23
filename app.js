@@ -33,14 +33,6 @@ app.use(bodyParser.json());
 // static AKA public. Makes uploads folder available in browser and able to see pictures by just typing path in URL
 app.use('/uploads', express.static('uploads'));
 
-// app.use((req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     res.header(
-//         'Access-Control-Allow-Headers',
-//         'Origin, Content-Type, Accept'
-//     );
-// });
-
 
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
